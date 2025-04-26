@@ -27,6 +27,7 @@ function App() {
         const formattedDate = date.toLocaleDateString();
         setCurrentDate(formattedDate);
 
+
         if (diffDays === 0) {
             setBackgroundImage('https://media1.tenor.com/m/RSc9Gw10HnsAAAAd/shrek-smirk-shrek-sus.gif');
         } else {
@@ -42,10 +43,26 @@ function App() {
             }
         };
 
+        const handleVisibilityChange = () => {
+            if (document.hidden) {
+                if (audioRef.current) {
+                    audioRef.current.pause();
+                }
+            } else {
+                if (audioRef.current) {
+                    audioRef.current.play().catch(error => {
+                        console.log('Audio play error:', error);
+                    });
+                }
+            }
+        };
+
         window.addEventListener('click', playAudio);
+        document.addEventListener('visibilitychange', handleVisibilityChange);
 
         return () => {
             window.removeEventListener('click', playAudio);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
         };
     }, [diffDays]); // ATTENTION ici aussi ➔ il faut écouter diffDays, pas isBirthday !
 
